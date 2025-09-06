@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'gift-list-item',
@@ -7,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './gift-list-item.component.css'
 })
 export class GiftListItemComponent {
+// TODO: imageUrl: string; input
+
+public imageUrl = input.required<string>();
+
 
 }
