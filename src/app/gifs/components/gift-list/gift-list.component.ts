@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { GiftListItemComponent } from "./gift-list-item/gift-list-item.component";
+import { GiftListItemComponent } from './gift-list-item/gift-list-item.component';
 
 @Component({
   selector: 'gift-list',
@@ -8,6 +8,5 @@ import { GiftListItemComponent } from "./gift-list-item/gift-list-item.component
   styleUrl: './gift-list.component.css',
 })
 export class GiftListComponent {
-  // todo input string[];
   public gift = input.required<string[]>();
 }
