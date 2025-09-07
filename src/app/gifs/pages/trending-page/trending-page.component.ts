@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { GiftListComponent } from "../../components/gift-list/gift-list.component";
+import { Component, inject, signal } from '@angular/core';
+import { GiftListComponent } from '../../components/gift-list/gift-list.component';
+import { GifService } from '../../services/gifs.service';
 
 const imageUrls: string[] = [
   'https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg',
@@ -19,8 +20,10 @@ const imageUrls: string[] = [
   selector: 'app-trending-page',
   imports: [GiftListComponent],
   templateUrl: './trending-page.component.html',
-  styleUrl: './trending-page.component.css'
+  styleUrl: './trending-page.component.css',
 })
 export default class TrendingPageComponent {
-gifs = signal (imageUrls);
+  gifs = signal(imageUrls);
+
+  gifService = inject(GifService);
 }
