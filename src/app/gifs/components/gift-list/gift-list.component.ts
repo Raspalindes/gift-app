@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { Gif } from '../../interfaces/gif.interface';
 import { GiftListItemComponent } from './gift-list-item/gift-list-item.component';
 
 @Component({
@@ -8,5 +9,5 @@ import { GiftListItemComponent } from './gift-list-item/gift-list-item.component
   styleUrl: './gift-list.component.css',
 })
 export class GiftListComponent {
-  public gift = input.required<string[]>();
+  public gift = input.required<Gif[]>();
 }
