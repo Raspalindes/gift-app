@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@environments/environment';
-import { map } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { Gif } from '../interfaces/gif.interface';
 import { GiphyResponse } from '../interfaces/giphy.interfaces';
 import { GifMapper } from '../mapper/gif.mapper';
@@ -14,6 +14,9 @@ export class GifService {
 
   trendingGifs = signal<Gif[]>([]);
   trendingGifsLoading = signal(true);
+
+  searchHistory = signal<Record<string, Gif[]>>({});
+  searchHistoryKeys = computed(() => Object.keys(this.searchHistory()));
 
   constructor() {
     this.loadTrendringGifs();
@@ -34,22 +37,22 @@ export class GifService {
         console.log({ gifs });
       });
   }
-// Cómo se construye la URL:
+  // Cómo se construye la URL:
 
-// URL base: `${environment.giphyUrl}/gifs/search`
+  // URL base: `${environment.giphyUrl}/gifs/search`
 
-// environment.giphyUrl → "https://api.giphy.com/v1"
-// Se concatena con /gifs/search
-// Resultado: "https://api.giphy.com/v1/gifs/search"
-// Parámetros: El objeto params: { ... }
+  // environment.giphyUrl → "https://api.giphy.com/v1"
+  // Se concatena con /gifs/search
+  // Resultado: "https://api.giphy.com/v1/gifs/search"
+  // Parámetros: El objeto params: { ... }
 
-// Angular automáticamente convierte este objeto en query parameters
-// api_key: environment.giphyApiKey → ?api_key=tu_clave
-// q: query → &q=texto_de_busqueda
-// limit: 20 → &limit=20
-// Resultado final: Angular combina automáticamente la URL base + los parámetros:
+  // Angular automáticamente convierte este objeto en query parameters
+  // api_key: environment.giphyApiKey → ?api_key=tu_clave
+  // q: query → &q=texto_de_busqueda
+  // limit: 20 → &limit=20
+  // Resultado final: Angular combina automáticamente la URL base + los parámetros:
 
-// https://api.giphy.com/v1/gifs/search?api_key=tu_clave&q=cats&limit=20
+  // https://api.giphy.com/v1/gifs/search?api_key=tu_clave&q=cats&limit=20
 
   searchGifs(query: string) {
     return this.http
@@ -62,7 +65,14 @@ export class GifService {
       })
       .pipe(
         map(({ data }) => data),
-        map((items) => GifMapper.mapGiphyItemsToGifArray(items))
+        map((items) => GifMapper.mapGiphyItemsToGifArray(items)),
+
+        tap((items) => {
+          this.searchHistory.update((history) => ({
+            ...history,
+            [query.toLocaleLowerCase()]: items,
+          }));
+        })
       );
   }
 }
