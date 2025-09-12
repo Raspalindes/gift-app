@@ -34,6 +34,22 @@ export class GifService {
         console.log({ gifs });
       });
   }
+// Cómo se construye la URL:
+
+// URL base: `${environment.giphyUrl}/gifs/search`
+
+// environment.giphyUrl → "https://api.giphy.com/v1"
+// Se concatena con /gifs/search
+// Resultado: "https://api.giphy.com/v1/gifs/search"
+// Parámetros: El objeto params: { ... }
+
+// Angular automáticamente convierte este objeto en query parameters
+// api_key: environment.giphyApiKey → ?api_key=tu_clave
+// q: query → &q=texto_de_busqueda
+// limit: 20 → &limit=20
+// Resultado final: Angular combina automáticamente la URL base + los parámetros:
+
+// https://api.giphy.com/v1/gifs/search?api_key=tu_clave&q=cats&limit=20
 
   searchGifs(query: string) {
     return this.http
